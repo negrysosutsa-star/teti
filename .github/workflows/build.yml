@@ -11,10 +11,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # Распаковываем архив во временную папку src-temp
       - name: Unzip sources
         run: |
-          mkdir -p bogempty-mod
-          unzip bogempty-src.zip -d bogempty-mod
+          mkdir -p src-temp
+          unzip bogempty-src.zip -d src-temp
+          # Перемещаем содержимое в bogempty-mod, чтобы структура была ровной
+          mv src-temp/bogempty-mod bogempty-mod
+          rm -rf src-temp
           ls -la bogempty-mod
 
       - name: Set up JDK 21
@@ -23,6 +27,7 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
+      # Теперь cd bogempty-mod зайдет именно туда, где лежит gradlew
       - name: Generate Minecraft Sources
         run: |
           cd bogempty-mod
