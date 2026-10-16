@@ -21,7 +21,7 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
         with:
-          gradle-version: 8.5
+          gradle-version: 8.10
 
       # Собираем проект с помощью системного gradle (без gradlew)
       - name: Build with Gradle
