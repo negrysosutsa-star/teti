@@ -8,7 +8,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Unzip sources
         run: |
@@ -22,14 +23,20 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      - name: Build
+      # ЭТОТ ШАГ СКАЧИВАЕТ ИСХОДНИКИ MINECRAFT (ЛЕЧИТ ОШИБКУ cannot find symbol)
+      - name: Generate Minecraft Sources
         run: |
           cd bogempty-mod
           chmod +x gradlew
+          ./gradlew genSources --no-daemon
+
+      - name: Build
+        run: |
+          cd bogempty-mod
           ./gradlew build --no-daemon
 
       - name: Upload jar
         uses: actions/upload-artifact@v4
         with:
-          name: bogempty-jar
+          name: BogEmpty-Mod
           path: bogempty-mod/build/libs/*.jar
