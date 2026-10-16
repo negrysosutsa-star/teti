@@ -11,36 +11,24 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Распаковываем архив во временную папку src-temp
-      - name: Unzip sources
-        run: |
-          mkdir -p src-temp
-          unzip bogempty-src.zip -d src-temp
-          # Перемещаем содержимое в bogempty-mod, чтобы структура была ровной
-          mv src-temp/bogempty-mod bogempty-mod
-          rm -rf src-temp
-          ls -la bogempty-mod
-
-      - name: Set up JDK 21
+      # Устанавливаем Java. Если мод старый (1.16.5 и ниже) - поменяйте на '8' или '17'
+      - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
-          java-version: '21'
+          java-version: '17'
           distribution: 'temurin'
 
-      # Теперь cd bogempty-mod зайдет именно туда, где лежит gradlew
-      - name: Generate Minecraft Sources
-        run: |
-          cd bogempty-mod
-          chmod +x gradlew
-          ./gradlew genSources --no-daemon
+      # Даем права на выполнение gradlew
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
 
-      - name: Build
-        run: |
-          cd bogempty-mod
-          ./gradlew build --no-daemon
+      # Собираем проект
+      - name: Build with Gradle
+        run: ./gradlew build
 
-      - name: Upload jar
+      # Сохраняем готовый .jar файл
+      - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: BogEmpty-Mod
-          path: bogempty-mod/build/libs/*.jar
+          path: build/libs/*.jar
