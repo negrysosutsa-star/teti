@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "ru.bogempty.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "TitleScreenMixin",
+    "InGameHudMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
